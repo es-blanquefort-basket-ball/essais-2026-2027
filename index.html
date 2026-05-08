@@ -109,40 +109,19 @@
       font-size: 1.14rem;
       opacity: 0.96;
     }
-
-    .hero-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+    .hero-note {
       margin-top: 24px;
-    }
-
-    .hero-btn {
-      border-radius: 999px;
-      padding: 13px 20px;
-      font-weight: 950;
-      font-size: 0.98rem;
-      cursor: pointer;
-      text-decoration: none;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      transition: 0.18s ease;
+      gap: 8px;
+      padding: 11px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.95);
+      font-weight: 800;
+      font-size: 0.95rem;
     }
-
-    .hero-btn.primary {
-      background: var(--white);
-      color: var(--green-dark);
-      border: 2px solid var(--white);
-    }
-
-    .hero-btn.secondary {
-      background: transparent;
-      color: var(--white);
-      border: 2px solid rgba(255,255,255,0.55);
-    }
-
-    .hero-btn:hover { transform: translateY(-1px); }
 
     .grid {
       display: grid;
@@ -202,6 +181,24 @@
       color: #7C3D12;
       font-size: 0.94rem;
     }
+
+    .category-help {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .category-help span {
+      background: var(--green-soft);
+      border: 1px solid #CFE3D5;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-weight: 750;
+    }
+
 
     .form-card { overflow: hidden; }
 
@@ -383,10 +380,10 @@
 
     @media (max-width: 520px) {
       .row { grid-template-columns: 1fr; }
+      .category-help { grid-template-columns: 1fr; }
       .page { padding-top: 12px; }
       .hero { border-radius: 22px; padding: 22px 18px; }
-      .hero-actions { display: grid; }
-      .hero-btn { width: 100%; }
+      .hero-note { border-radius: 18px; align-items: flex-start; }
     }
   </style>
 </head>
@@ -397,10 +394,7 @@
         <div class="eyebrow">Préparation saison 2026-2027</div>
         <h1>Viens te tester avant la fin de saison</h1>
         <p>Envie de découvrir le basket à Blanquefort ? Choisis ta catégorie, viens rencontrer l’équipe, et prépare ta place pour la saison prochaine.</p>
-        <div class="hero-actions">
-          <button type="button" class="hero-btn primary" onclick="document.getElementById('category').focus(); document.getElementById('trialForm').scrollIntoView({behavior:'smooth', block:'start'});">Choisir une catégorie</button>
-          <a href="#infos" class="hero-btn secondary">Voir les infos pratiques</a>
-        </div>
+        <div class="hero-note">🏀 Catégorie → séance proposée → demande envoyée au club</div>
       </div>
       <div class="hero-brand" aria-label="Logo ES Blanquefort Basket Ball">
         <img src="logo.png" alt="ES Blanquefort Basket Ball" onerror="this.style.display='none'" />
@@ -414,17 +408,17 @@
           <div class="steps">
             <div class="step"><div class="num">1</div><div>Choisis la catégorie concernée : seules les séances utiles s’affichent.</div></div>
             <div class="step"><div class="num">2</div><div>Renseigne les coordonnées de l’enfant et du parent référent.</div></div>
-            <div class="step"><div class="num">3</div><div>Le club confirme le créneau par mail ou téléphone.</div></div>
-            <div class="step"><div class="num">4</div><div>Le jour J : tenue de sport, baskets propres et gourde.</div></div>
+            <div class="step"><div class="num">3</div><div>Le club confirme la séance puis fait un retour après l’essai.</div></div>
+            <div class="step"><div class="num">4</div><div>Si l’enfant souhaite continuer, un second formulaire permettra de demander un deuxième essai ou une pré-inscription.</div></div>
           </div>
-          <div class="notice">Les séances servent à préparer les effectifs 2026-2027. Les créneaux peuvent être ajustés selon les groupes et les entraîneurs.</div>
+          <div class="notice"><strong>Information importante :</strong><br><br>Les créneaux affichés correspondent provisoirement à l’organisation actuelle du club. Les horaires et groupes définitifs 2026-2027 sont en cours de préparation avec les entraîneurs.<br><br>Après un ou deux essais, le club pourra proposer un dossier de pré-inscription afin de réserver une place potentielle pour la saison prochaine. Aucun règlement ne sera encaissé avant validation définitive en septembre.</div>
         </div>
       </aside>
 
       <section class="card form-card">
         <div class="form-head">
           <strong>Demande de séance d’essai</strong>
-          <span>Commence par choisir une catégorie : les séances proposées s’affichent ensuite.</span>
+          <span>Choisis une catégorie pour voir uniquement les séances correspondant à l’âge et au niveau concerné.</span>
         </div>
 
         <form id="trialForm">
@@ -432,21 +426,27 @@
             <label for="category">Catégorie</label>
             <select id="category" name="category" required>
               <option value="">Choisir une catégorie</option>
-              <option>U5 — nés en 2022-2023</option>
-              <option>U7 — nés en 2020-2021</option>
-              <option>U9F — nées en 2018-2019</option>
-              <option>U9M — nés en 2018-2019</option>
-              <option>U11F — nées en 2016-2017</option>
-              <option>U11M — nés en 2016-2017</option>
-              <option>U13F — nées en 2014-2015</option>
-              <option>U13M — nés en 2014-2015</option>
-              <option>U15F — nées en 2012-2013</option>
-              <option>U15M — nés en 2012-2013</option>
-              <option>U18M — nés en 2009-2011</option>
-              <option>U21M — nés en 2006-2008</option>
-              <option>Seniors M — à partir de 2005</option>
-              <option>Loisirs — adultes</option>
+              <option value="U5">U5 — nés en 2022-2023</option>
+              <option value="U7">U7 — nés en 2020-2021</option>
+              <option value="U9F">U9F — nées en 2018-2019</option>
+              <option value="U9M">U9M — nés en 2018-2019</option>
+              <option value="U11F">U11F — nées en 2016-2017</option>
+              <option value="U11M">U11M — nés en 2016-2017</option>
+              <option value="U13F">U13F — nées en 2014-2015</option>
+              <option value="U13M">U13M — nés en 2014-2015</option>
+              <option value="U15F">U15F — nées en 2012-2013</option>
+              <option value="U15M">U15M — nés en 2012-2013</option>
+              <option value="U18M">U18M — nés en 2009-2011</option>
+              <option value="U21M">U21M — nés en 2006-2008</option>
+              <option value="Seniors M">Seniors M — à partir de 2005</option>
+              <option value="Loisirs">Loisirs — adultes</option>
             </select>
+            <div class="category-help">
+              <span>U5 : 2022-2023</span><span>U7 : 2020-2021</span>
+              <span>U9 : 2018-2019</span><span>U11 : 2016-2017</span>
+              <span>U13 : 2014-2015</span><span>U15 : 2012-2013</span>
+              <span>U18 : 2009-2011</span><span>U21 : 2006-2008</span>
+            </div>
           </div>
 
           <div>
@@ -492,7 +492,7 @@
             <div><label for="parentPhone">Téléphone parent</label><input id="parentPhone" name="parentPhone" type="tel" required placeholder="06 00 00 00 00" /></div>
           </div>
 
-          <div><label for="comment">Commentaire facultatif</label><textarea id="comment" name="comment" placeholder="Expérience basket, disponibilités, information utile…"></textarea></div>
+          <div><label for="comment">Commentaire facultatif</label><textarea id="comment" name="comment" placeholder="Expérience basket, disponibilités, niveau actuel, information utile…"></textarea></div>
 
           <button class="submit" type="submit">Envoyer la demande</button>
           <div class="success" id="successMessage">Votre demande a bien été enregistrée. Le club revient vers vous rapidement.</div>
