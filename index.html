@@ -1,41 +1,452 @@
-from pathlib import Path
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essais Basket 2026-2027 — ES Blanquefort Basket Ball</title>
+<style>
+:root {
+  --green:#0b5c3b;
+  --green2:#0f7a4f;
+  --dark:#10251c;
+  --muted:#6b7b73;
+  --danger:#b42318;
+  --radius:20px;
+  --shadow:0 18px 45px rgba(16,37,28,.16);
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:radial-gradient(circle at top left,rgba(11,92,59,.18),transparent 35%),linear-gradient(135deg,#f7fbf9,#eaf3ef);
+  color:var(--dark);
+}
+header {
+  padding:28px 18px 18px;
+  text-align:center;
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  color:#fff;
+}
+header img {
+  max-width:90px;
+  margin-bottom:10px;
+}
+header h1 {
+  margin:0;
+  font-size:28px;
+  line-height:1.15;
+}
+header p {
+  margin:10px auto 0;
+  max-width:760px;
+  opacity:.94;
+  font-size:15px;
+}
+main {
+  width:min(980px,94vw);
+  margin:24px auto 42px;
+  display:grid;
+  gap:18px;
+}
+.card {
+  background:rgba(255,255,255,.96);
+  border:1px solid rgba(11,92,59,.13);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px;
+}
+h2 {
+  margin:0 0 12px;
+  color:var(--green);
+  font-size:22px;
+}
+.intro {
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:18px;
+}
+.notice {
+  background:#eff8f3;
+  border-left:5px solid var(--green);
+  padding:14px 16px;
+  border-radius:14px;
+  font-size:14px;
+  line-height:1.45;
+  margin-top:12px;
+}
+.warning {
+  background:#fff7e6;
+  border-left:5px solid #f0a500;
+  padding:14px 16px;
+  border-radius:14px;
+  font-size:14px;
+  line-height:1.45;
+  margin-top:12px;
+}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.slot {
+  border:1px solid #dce9e3;
+  border-radius:16px;
+  padding:14px;
+  background:#fff;
+}
+.slot strong {
+  display:block;
+  font-size:16px;
+  color:var(--green);
+}
+.slot span {
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.35;
+}
+label {
+  display:block;
+  font-weight:700;
+  margin:14px 0 6px;
+  font-size:14px;
+}
+input, select, textarea {
+  width:100%;
+  border:1px solid #cbd8d2;
+  border-radius:12px;
+  padding:12px;
+  font-size:15px;
+  background:white;
+}
+input[readonly] {
+  background:#eff8f3;
+  color:#0b5c3b;
+  font-weight:800;
+}
+textarea {
+  min-height:90px;
+  resize:vertical;
+}
+.form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px 16px;
+}
+.full {
+  grid-column:1/-1;
+}
+.actions {
+  display:flex;
+  gap:12px;
+  align-items:center;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+button {
+  border:none;
+  border-radius:999px;
+  padding:13px 20px;
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  color:white;
+  font-weight:800;
+  cursor:pointer;
+  font-size:15px;
+  box-shadow:0 10px 22px rgba(11,92,59,.22);
+}
+button:disabled {
+  opacity:.6;
+  cursor:not-allowed;
+}
+.msg {
+  font-weight:700;
+  font-size:14px;
+}
+.ok { color:var(--green); }
+.ko { color:var(--danger); }
+.help {
+  font-size:12px;
+  color:var(--muted);
+  margin-top:5px;
+  line-height:1.35;
+}
+footer {
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  padding:0 18px 28px;
+}
+@media(max-width:760px) {
+  .intro,.grid,.form-grid { grid-template-columns:1fr; }
+  header h1 { font-size:24px; }
+  .card { padding:18px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="Logo ES Blanquefort Basket Ball" onerror="this.style.display='none'">
+  <h1>Essais Basket — Saison 2026-2027</h1>
+  <p>Les essais concernent les catégories de la saison prochaine. La catégorie est indiquée automatiquement avec la date de naissance.</p>
+</header>
 
-# Repartir de la V5 si elle existe, sinon de la V4.
-source_html = Path("/mnt/data/essais_basket_2026_2027_v5.html")
-source_gs = Path("/mnt/data/essais_basket_2026_2027_appscript_v5.gs")
+<main>
+  <section class="intro">
+    <div class="card">
+      <h2>Principe</h2>
+      <p>Les essais sont organisés par <strong>catégorie 2026-2027</strong>. Votre enfant sera donc orienté vers sa future équipe.</p>
+      <div class="warning"><strong>Important :</strong> ce formulaire permet de s’inscrire à <strong>un seul essai</strong>. Pour deux essais, merci de remplir une deuxième demande.</div>
+      <div class="notice">L’e-mail parent renseigné pourra être utilisé par le club pour l’envoi du dossier FFBB si l’inscription se confirme.</div>
+    </div>
 
-if not source_html.exists():
-    source_html = Path("/mnt/data/essais_basket_2026_2027_v4.html")
-if not source_gs.exists():
-    source_gs = Path("/mnt/data/essais_basket_2026_2027_appscript_v4.gs")
+    <div class="card">
+      <h2>Lieux</h2>
+      <p><strong>Fongravey</strong><br><span style="color:#6b7b73">Adresse du gymnase à compléter</span></p>
+      <p><strong>Port du Roy</strong><br><span style="color:#6b7b73">Adresse du gymnase à compléter</span></p>
+      <p><strong>Contact :</strong><br>contact@es-blanquefort-basketball.fr</p>
+    </div>
+  </section>
 
-html = source_html.read_text(encoding="utf-8")
-gs = source_gs.read_text(encoding="utf-8")
+  <section class="card">
+    <h2>Dates proposées</h2>
+    <div class="grid">
+      <div class="slot"><strong>20 mai — U13</strong><span>15h00 → 16h30 · Fongravey</span></div>
+      <div class="slot"><strong>25 mai — U9</strong><span>17h30 · Fongravey</span></div>
+      <div class="slot"><strong>25 mai — U11</strong><span>19h00 · Fongravey</span></div>
+      <div class="slot"><strong>27 mai — U15 / U18</strong><span>19h30 → 21h00 · Port du Roy</span></div>
+      <div class="slot"><strong>6 juin — U13 / U15</strong><span>10h00 → 12h00 · Port du Roy</span></div>
+      <div class="slot"><strong>6 juin — U9</strong><span>14h00 · Fongravey</span></div>
+      <div class="slot"><strong>6 juin — U11</strong><span>15h30 · Fongravey</span></div>
+      <div class="slot"><strong>3 juin — U5</strong><span>16h45 → 17h30 · Fongravey</span></div>
+      <div class="slot"><strong>3 juin — U7</strong><span>17h45 → 18h30 · Fongravey</span></div>
+      <div class="slot"><strong>10 juin — U5</strong><span>16h45 → 17h30 · Fongravey</span></div>
+      <div class="slot"><strong>10 juin — U7</strong><span>17h45 → 18h30 · Fongravey</span></div>
+      <div class="slot"><strong>17 juin — U5</strong><span>16h45 → 17h30 · Fongravey</span></div>
+      <div class="slot"><strong>17 juin — U7</strong><span>17h45 → 18h30 · Fongravey</span></div>
+      <div class="slot"><strong>24 juin — U5</strong><span>16h45 → 17h30 · Fongravey</span></div>
+      <div class="slot"><strong>24 juin — U7</strong><span>17h45 → 18h30 · Fongravey</span></div>
+    </div>
+  </section>
 
-# Corrections de wording côté HTML : pas de "calculé", pas de "à calculer".
-replacements_html = {
-    "La catégorie est calculée automatiquement avec la date de naissance.": "La catégorie saison prochaine est déterminée automatiquement avec la date de naissance.",
-    "Catégorie 2026-2027 calculée": "Catégorie saison prochaine",
-    "La catégorie 2026-2027 est calculée automatiquement.": "La catégorie saison prochaine sera indiquée automatiquement.",
-    'placeholder="À calculer"': 'placeholder="Indiquée après la date de naissance"',
-    "Catégorie calculée pour la saison 2026-2027 :": "Catégorie saison prochaine :",
-    "categorieHelp.textContent = \"Renseignez la date de naissance.\";": "categorieHelp.textContent = \"Renseignez la date de naissance.\";",
-    "categorieHelp.textContent = `Catégorie calculée pour la saison 2026-2027 : ${cat}.`;": "categorieHelp.textContent = `Catégorie saison prochaine : ${cat}.`;",
-    "La catégorie doit être vérifiée avant l’envoi.": "La catégorie saison prochaine doit être indiquée avant l’envoi."
+  <section class="card">
+    <h2>Inscription à un essai</h2>
+    <form id="essaiForm">
+      <div class="form-grid">
+        <div>
+          <label for="prenom">Prénom de l’enfant *</label>
+          <input id="prenom" name="prenom" required>
+        </div>
+        <div>
+          <label for="nom">Nom de l’enfant *</label>
+          <input id="nom" name="nom" required>
+        </div>
+        <div>
+          <label for="dateNaissance">Date de naissance *</label>
+          <input id="dateNaissance" name="dateNaissance" type="date" required>
+          <div class="help">La catégorie saison prochaine sera indiquée automatiquement.</div>
+        </div>
+        <div>
+          <label for="categorie">Catégorie saison prochaine</label>
+          <input id="categorie" name="categorie" readonly placeholder="Indiquée après la date de naissance">
+          <div class="help" id="categorieHelp">Renseignez la date de naissance.</div>
+        </div>
+        <div class="full">
+          <label for="creneau">Date d’essai choisie *</label>
+          <select id="creneau" name="creneau" required>
+            <option value="">Renseigner la date de naissance d’abord</option>
+          </select>
+        </div>
+        <div>
+          <label for="parent">Nom du parent *</label>
+          <input id="parent" name="parent" required>
+        </div>
+        <div>
+          <label for="telephone">Téléphone parent *</label>
+          <input id="telephone" name="telephone" type="tel" required>
+        </div>
+        <div class="full">
+          <label for="email">E-mail parent *</label>
+          <input id="email" name="email" type="email" required>
+          <div class="help">Cet e-mail pourra être utilisé pour l’envoi du dossier FFBB si l’inscription est poursuivie.</div>
+        </div>
+        <div class="full">
+          <label for="commentaire">Commentaire utile</label>
+          <textarea id="commentaire" name="commentaire" placeholder="Ex : déjà licencié ailleurs, débutant, contrainte horaire..."></textarea>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="submit" id="submitBtn">Envoyer la demande d’essai</button>
+        <span id="message" class="msg"></span>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer>ES Blanquefort Basket Ball — Données utilisées uniquement pour organiser les essais et préparer les effectifs.</footer>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2isdaOnCpljcE8I1RaBSp8Jflp8-LJjgUgHp8N0l57cV7wpkQvXV4GX01anp-6wJ6CA/exec";
+
+const CRENEAUX_FALLBACK = [
+  {id:"ESS001",date:"20/05/2026",jour:"Mardi",categorie:"U13",debut:"15:00",fin:"16:30",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS002",date:"25/05/2026",jour:"Lundi",categorie:"U9",debut:"17:30",fin:"",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS003",date:"25/05/2026",jour:"Lundi",categorie:"U11",debut:"19:00",fin:"",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS004",date:"27/05/2026",jour:"Mercredi",categorie:"U15",debut:"19:30",fin:"21:00",lieu:"Port du Roy",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS005",date:"27/05/2026",jour:"Mercredi",categorie:"U18",debut:"19:30",fin:"21:00",lieu:"Port du Roy",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS006",date:"06/06/2026",jour:"Samedi",categorie:"U13",debut:"10:00",fin:"12:00",lieu:"Port du Roy",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS007",date:"06/06/2026",jour:"Samedi",categorie:"U15",debut:"10:00",fin:"12:00",lieu:"Port du Roy",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS008",date:"06/06/2026",jour:"Samedi",categorie:"U9",debut:"14:00",fin:"",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS009",date:"06/06/2026",jour:"Samedi",categorie:"U11",debut:"15:30",fin:"",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS010",date:"03/06/2026",jour:"Mercredi",categorie:"U5",debut:"16:45",fin:"17:30",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS011",date:"03/06/2026",jour:"Mercredi",categorie:"U7",debut:"17:45",fin:"18:30",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS012",date:"10/06/2026",jour:"Mercredi",categorie:"U5",debut:"16:45",fin:"17:30",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS013",date:"10/06/2026",jour:"Mercredi",categorie:"U7",debut:"17:45",fin:"18:30",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS014",date:"17/06/2026",jour:"Mercredi",categorie:"U5",debut:"16:45",fin:"17:30",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS015",date:"17/06/2026",jour:"Mercredi",categorie:"U7",debut:"17:45",fin:"18:30",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS016",date:"24/06/2026",jour:"Mercredi",categorie:"U5",debut:"16:45",fin:"17:30",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"},
+  {id:"ESS017",date:"24/06/2026",jour:"Mercredi",categorie:"U7",debut:"17:45",fin:"18:30",lieu:"Fongravey",adresse:"Adresse du gymnase à compléter"}
+];
+
+let creneaux = CRENEAUX_FALLBACK;
+
+const dateNaissanceInput = document.getElementById("dateNaissance");
+const categorieInput = document.getElementById("categorie");
+const categorieHelp = document.getElementById("categorieHelp");
+const creneauSelect = document.getElementById("creneau");
+const form = document.getElementById("essaiForm");
+const message = document.getElementById("message");
+const submitBtn = document.getElementById("submitBtn");
+
+function determinerCategorie2026_2027(dateValue) {
+  if (!dateValue) return "";
+  const year = new Date(dateValue).getFullYear();
+  if (!year || Number.isNaN(year)) return "";
+  if (year === 2022) return "U5";
+  if (year === 2020 || year === 2021) return "U7";
+  if (year === 2018 || year === 2019) return "U9";
+  if (year === 2016 || year === 2017) return "U11";
+  if (year === 2014 || year === 2015) return "U13";
+  if (year === 2012 || year === 2013) return "U15";
+  if (year >= 2009 && year <= 2011) return "U18";
+  if (year <= 2008) return "Seniors";
+  if (year >= 2023) return "Trop jeune";
+  return "À vérifier";
 }
 
-for old, new in replacements_html.items():
-    html = html.replace(old, new)
+function labelCreneau(c) {
+  const horaire = c.fin ? `${c.debut} → ${c.fin}` : c.debut;
+  return `${c.jour} ${c.date} · ${horaire} · ${c.lieu}`;
+}
 
-# Corrections côté Apps Script / Sheet
-gs = gs.replace("Catégorie 2026-2027 calculée", "Catégorie saison prochaine")
-gs = gs.replace("categorieCalculee", "categorieSaisonProchaine")
-gs = gs.replace("computeCategorie2026_2027_", "determinerCategorie2026_2027_")
+function refreshCreneaux() {
+  const cat = categorieInput.value;
+  creneauSelect.innerHTML = "";
+  const empty = document.createElement("option");
+  empty.value = "";
+  empty.textContent = cat && cat !== "Trop jeune" && cat !== "À vérifier" ? "Choisir une date d’essai" : "Catégorie à vérifier";
+  creneauSelect.appendChild(empty);
 
-# Sécurisation : supprimer occurrences restantes visibles de "calculé"/"À calculer" dans HTML
-html = html.replace("calculée", "déterminée").replace("calculé", "déterminé").replace("À calculer", "Indiquée après la date de naissance")
+  if (!cat || cat === "Trop jeune" || cat === "À vérifier") return;
 
-Path("/mnt/data/essais_basket_2026_2027_v6.html").write_text(html, encoding="utf-8")
-Path("/mnt/data/essais_basket_2026_2027_appscript_v6.gs").write_text(gs, encoding="utf-8")
+  creneaux.filter(c => c.categorie === cat).forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c.id;
+    opt.textContent = labelCreneau(c);
+    creneauSelect.appendChild(opt);
+  });
+}
 
-print("V6 créée : wording corrigé")
+function updateCategorie() {
+  const cat = determinerCategorie2026_2027(dateNaissanceInput.value);
+  categorieInput.value = cat;
+  if (!cat) {
+    categorieHelp.textContent = "Renseignez la date de naissance.";
+  } else if (cat === "Trop jeune" || cat === "À vérifier") {
+    categorieHelp.textContent = "Catégorie à vérifier avec le club.";
+  } else {
+    categorieHelp.textContent = `Catégorie saison prochaine : ${cat}.`;
+  }
+  refreshCreneaux();
+}
+
+async function loadCreneaux() {
+  try {
+    const res = await fetch(WEB_APP_URL + "?action=getCreneauxEssais");
+    const json = await res.json();
+    if (json.ok && Array.isArray(json.data) && json.data.length) {
+      creneaux = json.data;
+      refreshCreneaux();
+    }
+  } catch (e) {
+    console.warn("Créneaux fallback utilisés", e);
+  }
+}
+
+dateNaissanceInput.addEventListener("change", updateCategorie);
+dateNaissanceInput.addEventListener("input", updateCategorie);
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  updateCategorie();
+  message.textContent = "";
+  message.className = "msg";
+
+  if (!categorieInput.value || categorieInput.value === "Trop jeune" || categorieInput.value === "À vérifier") {
+    message.textContent = "La catégorie saison prochaine doit être vérifiée avant l’envoi.";
+    message.classList.add("ko");
+    return;
+  }
+
+  const selected = creneaux.find(c => c.id === creneauSelect.value);
+  if (!selected) {
+    message.textContent = "Merci de choisir une date d’essai.";
+    message.classList.add("ko");
+    return;
+  }
+
+  submitBtn.disabled = true;
+
+  const payload = {
+    nom: form.nom.value.trim(),
+    prenom: form.prenom.value.trim(),
+    dateNaissance: form.dateNaissance.value,
+    categorie: categorieInput.value,
+    idEssai: form.creneau.value,
+    creneauLabel: selected ? labelCreneau(selected) : "",
+    lieu: selected ? selected.lieu : "",
+    adresse: selected ? selected.adresse : "",
+    parent: form.parent.value.trim(),
+    telephone: form.telephone.value.trim(),
+    email: form.email.value.trim(),
+    commentaire: form.commentaire.value.trim(),
+    source: "Site public"
+  };
+
+  try {
+    const res = await fetch(WEB_APP_URL, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.message || "Erreur inconnue");
+
+    message.textContent = "Demande envoyée. Vous recevrez les informations pratiques si besoin. Pour un deuxième essai, merci de remplir une nouvelle demande.";
+    message.classList.add("ok");
+    form.reset();
+    updateCategorie();
+  } catch (err) {
+    message.textContent = "Impossible d’envoyer pour le moment. Merci de réessayer.";
+    message.classList.add("ko");
+    console.error(err);
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
+
+updateCategorie();
+loadCreneaux();
+</script>
+</body>
+</html>
