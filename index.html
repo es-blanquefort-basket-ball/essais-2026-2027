@@ -1,496 +1,62 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Essais Basket 2026-2027 — ES Blanquefort Basket Ball</title>
 <style>
-:root {
-  --green:#0b5c3b;
-  --green2:#0f7a4f;
-  --dark:#10251c;
-  --muted:#6b7b73;
-  --danger:#b42318;
-  --radius:20px;
-  --shadow:0 18px 45px rgba(16,37,28,.16);
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:radial-gradient(circle at top left,rgba(11,92,59,.18),transparent 35%),linear-gradient(135deg,#f7fbf9,#eaf3ef);
-  color:var(--dark);
-}
-header {
-  padding:28px 18px 18px;
-  text-align:center;
-  background:linear-gradient(135deg,var(--green),var(--green2));
-  color:#fff;
-}
-header img {
-  max-width:90px;
-  margin-bottom:10px;
-}
-header h1 {
-  margin:0;
-  font-size:28px;
-  line-height:1.15;
-}
-header p {
-  margin:10px auto 0;
-  max-width:760px;
-  opacity:.94;
-  font-size:12px;
-}
-main {
-  width:min(980px,94vw);
-  margin:24px auto 42px;
-  display:grid;
-  gap:18px;
-}
-.card {
-  background:rgba(255,255,255,.96);
-  border:1px solid rgba(11,92,59,.13);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:18px;
-}
-h2 {
-  margin:0 0 12px;
-  color:var(--green);
-  font-size:20px;
-}
-.intro {
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:18px;
-}
-.notice {
-  background:#eff8f3;
-  border-left:5px solid var(--green);
-  padding:14px 16px;
-  border-radius:12px;
-  font-size:14px;
-  line-height:1.45;
-  margin-top:12px;
-}
-.warning {
-  background:#fff7e6;
-  border-left:5px solid #f0a500;
-  padding:14px 16px;
-  border-radius:12px;
-  font-size:14px;
-  line-height:1.45;
-  margin-top:12px;
-}
-.grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-.slot {
-  border:1px solid #dce9e3;
-  border-radius:16px;
-  padding:14px;
-  background:#fff;
-}
-.slot strong {
-  display:block;
-  font-size:12px;
-  color:var(--green);
-}
-.slot span {
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.25;
-}
-label {
-  display:block;
-  font-weight:700;
-  margin:14px 0 6px;
-  font-size:14px;
-}
-input, select, textarea {
-  width:100%;
-  border:1px solid #cbd8d2;
-  border-radius:12px;
-  padding:12px;
-  font-size:12px;
-  background:white;
-}
-input[readonly] {
-  background:#eff8f3;
-  color:#0b5c3b;
-  font-weight:800;
-}
-textarea {
-  min-height:90px;
-  resize:vertical;
-}
-.form-grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px 16px;
-}
-.full {
-  grid-column:1/-1;
-}
-.actions {
-  display:flex;
-  gap:12px;
-  align-items:center;
-  margin-top:18px;
-  flex-wrap:wrap;
-}
-button {
-  border:none;
-  border-radius:999px;
-  padding:13px 20px;
-  background:linear-gradient(135deg,var(--green),var(--green2));
-  color:white;
-  font-weight:800;
-  cursor:pointer;
-  font-size:12px;
-  box-shadow:0 10px 22px rgba(11,92,59,.22);
-}
-button:disabled {
-  opacity:.6;
-  cursor:not-allowed;
-}
-.msg {
-  font-weight:700;
-  font-size:14px;
-}
-.ok { color:var(--green); }
-.ko { color:var(--danger); }
-.help {
-  font-size:12px;
-  color:var(--muted);
-  margin-top:5px;
-  line-height:1.35;
-}
-footer {
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding:0 18px 28px;
-}
-@media(max-width:1100px) {
-  .grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
-}
-@media(max-width:850px) {
-  .grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-}
-@media(max-width:760px) {
-  .intro,.grid,.form-grid { grid-template-columns:1fr; }
-  header h1 { font-size:24px; }
-  .card { padding:18px; }
-}
-
-/* V9 — dates compactes mobile */
-section.card:has(.grid) {
-  padding: 14px;
-}
-.grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 8px !important;
-}
-.slot {
-  padding: 8px 8px !important;
-  border-radius: 12px !important;
-  min-height: 74px;
-}
-.slot strong {
-  font-size: 12.5px !important;
-  line-height: 1.15 !important;
-}
-.slot span {
-  font-size: 11.5px !important;
-  line-height: 1.2 !important;
-  margin-top: 5px !important;
-}
-@media (max-width: 360px) {
-  .grid {
-    gap: 6px !important;
-  }
-  .slot {
-    padding: 7px 6px !important;
-  }
-  .slot strong {
-    font-size: 11.5px !important;
-  }
-  .slot span {
-    font-size: 10.5px !important;
-  }
-}
-
-</style>
-</head>
+:root{--green:#0b5c3b;--green2:#0f7a4f;--dark:#10251c;--muted:#6b7b73;--danger:#b42318;--radius:20px;--shadow:0 18px 45px rgba(16,37,28,.16);--u5:#e8f7ff;--u7:#fff1d6;--u9:#e7f8ed;--u11:#f1e9ff;--u13:#ffe8e8;--u15:#e8f0ff;--u18:#fff0f6}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at top left,rgba(11,92,59,.18),transparent 35%),linear-gradient(135deg,#f7fbf9,#eaf3ef);color:var(--dark)}
+header{padding:28px 18px 18px;text-align:center;background:linear-gradient(135deg,var(--green),var(--green2));color:#fff}
+header img{max-width:90px;margin-bottom:10px}header h1{margin:0;font-size:28px;line-height:1.15}header p{margin:10px auto 0;max-width:760px;opacity:.94;font-size:15px}
+main{width:min(1040px,94vw);margin:24px auto 42px;display:grid;gap:18px}.card{background:rgba(255,255,255,.96);border:1px solid rgba(11,92,59,.13);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+h2{margin:0 0 12px;color:var(--green);font-size:20px}.intro{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.notice{background:#eff8f3;border-left:5px solid var(--green);padding:14px 16px;border-radius:14px;font-size:14px;line-height:1.45;margin-top:12px}.warning{background:#fff7e6;border-left:5px solid #f0a500;padding:14px 16px;border-radius:14px;font-size:14px;line-height:1.45;margin-top:12px}
+.legend{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0 16px}.badge{border-radius:999px;padding:8px 10px;font-size:12px;font-weight:800;border:1px solid rgba(16,37,28,.1)}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.day-name{font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:800;text-align:center}.day{min-height:92px;border:1px solid #dce9e3;border-radius:14px;background:#fff;padding:7px;display:flex;flex-direction:column;gap:5px}.day.empty{background:transparent;border:0}.date{font-size:12px;font-weight:900;color:var(--green)}
+.event{border:0;border-radius:10px;padding:6px;text-align:left;cursor:pointer;font-size:11px;line-height:1.18;color:#10251c;width:100%;box-shadow:none;font-weight:800}.event small{display:block;font-size:10px;font-weight:700;color:#51615a;margin-top:2px}.u5{background:var(--u5)}.u7{background:var(--u7)}.u9{background:var(--u9)}.u11{background:var(--u11)}.u13{background:var(--u13)}.u15{background:var(--u15)}.u18{background:var(--u18)}
+label{display:block;font-weight:700;margin:14px 0 6px;font-size:14px}input,select,textarea{width:100%;border:1px solid #cbd8d2;border-radius:12px;padding:12px;font-size:15px;background:white}input[readonly]{background:#eff8f3;color:#0b5c3b;font-weight:800}textarea{min-height:90px;resize:vertical}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}.full{grid-column:1/-1}.actions{display:flex;gap:12px;align-items:center;margin-top:18px;flex-wrap:wrap}.submit{border:none;border-radius:999px;padding:13px 20px;background:linear-gradient(135deg,var(--green),var(--green2));color:white;font-weight:800;cursor:pointer;font-size:15px;box-shadow:0 10px 22px rgba(11,92,59,.22)}button:disabled{opacity:.6;cursor:not-allowed}.msg{font-weight:700;font-size:14px}.ok{color:var(--green)}.ko{color:var(--danger)}.help{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.35}footer{text-align:center;color:var(--muted);font-size:13px;padding:0 18px 28px}
+@media(max-width:860px){.intro,.form-grid{grid-template-columns:1fr}.legend{grid-template-columns:repeat(2,minmax(0,1fr))}.calendar{grid-template-columns:repeat(2,1fr)}.day-name,.day.empty{display:none}.day{min-height:auto}}
+</style></head>
 <body>
-<header>
-  <img src="logo.png" alt="Logo ES Blanquefort Basket Ball" onerror="this.style.display='none'">
-  <h1>Essais Basket — Saison 2026-2027</h1>
-  <p>Les essais concernent les catégories de la saison prochaine. La catégorie est indiquée automatiquement avec la date de naissance.</p>
-</header>
-
+<header><img src="logo.png" alt="Logo ES Blanquefort Basket Ball" onerror="this.style.display='none'"><h1>Essais Basket — Saison 2026-2027</h1><p>Choisissez un créneau dans le calendrier. La catégorie saison prochaine est indiquée avec la date de naissance.</p></header>
 <main>
-  <section class="intro">
-    <div class="card">
-      <h2>Principe</h2>
-      <p>Les essais sont organisés par <strong>catégorie 2026-2027</strong>. Votre enfant sera donc orienté vers sa future équipe.</p>
-      <div class="warning"><strong>Important :</strong> ce formulaire permet de s’inscrire à <strong>un seul essai</strong>. Pour deux essais, merci de remplir une deuxième demande.</div>
-      <div class="notice">L’e-mail parent renseigné pourra être utilisé par le club pour l’envoi du dossier FFBB si l’inscription se confirme.</div>
-    </div>
-
-    <div class="card">
-      <h2>Lieux</h2>
-      <p><strong>Fongravey</strong><br><span style="color:#6b7b73">Rue Jean Moulin, Blanquefort</span></p>
-      <p><strong>Port du Roy</strong><br><span style="color:#6b7b73">Adresse Port du Roy à compléter</span></p>
-      <p><strong>Contact :</strong><br>contact@es-blanquefort-basketball.fr</p>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Dates proposées</h2>
-    <div class="grid">
-      <div class="slot"><strong>20 mai — U13</strong><span>15h00 → 16h30 · Fongravey</span></div>
-      <div class="slot"><strong>25 mai — U9</strong><span>17h30 · Fongravey</span></div>
-      <div class="slot"><strong>25 mai — U11</strong><span>19h00 · Fongravey</span></div>
-      <div class="slot"><strong>27 mai — U15 / U18</strong><span>19h30 → 21h00 · Port du Roy</span></div>
-      <div class="slot"><strong>6 juin — U13 / U15</strong><span>10h00 → 12h00 · Port du Roy</span></div>
-      <div class="slot"><strong>6 juin — U9</strong><span>14h15 → 15h30 · Fongravey</span></div>
-      <div class="slot"><strong>6 juin — U11</strong><span>15h30 → 17h00 · Fongravey</span></div>
-      <div class="slot"><strong>3 juin — U5</strong><span>16h45 → 17h30 · Fongravey</span></div>
-      <div class="slot"><strong>3 juin — U7</strong><span>17h45 → 18h30 · Fongravey</span></div>
-      <div class="slot"><strong>10 juin — U5</strong><span>16h45 → 17h30 · Fongravey</span></div>
-      <div class="slot"><strong>10 juin — U7</strong><span>17h45 → 18h30 · Fongravey</span></div>
-      <div class="slot"><strong>17 juin — U5</strong><span>16h45 → 17h30 · Fongravey</span></div>
-      <div class="slot"><strong>17 juin — U7</strong><span>17h45 → 18h30 · Fongravey</span></div>
-      <div class="slot"><strong>24 juin — U5</strong><span>16h45 → 17h30 · Fongravey</span></div>
-      <div class="slot"><strong>24 juin — U7</strong><span>17h45 → 18h30 · Fongravey</span></div>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Inscription à un essai</h2>
-    <form id="essaiForm">
-      <div class="form-grid">
-        <div>
-          <label for="prenom">Prénom de l’enfant *</label>
-          <input id="prenom" name="prenom" required>
-        </div>
-        <div>
-          <label for="nom">Nom de l’enfant *</label>
-          <input id="nom" name="nom" required>
-        </div>
-        <div>
-          <label for="dateNaissance">Date de naissance *</label>
-          <input id="dateNaissance" name="dateNaissance" type="date" required>
-          <div class="help">La catégorie saison prochaine sera indiquée automatiquement.</div>
-        </div>
-        <div>
-          <label for="categorie">Catégorie saison prochaine</label>
-          <input id="categorie" name="categorie" readonly placeholder="Indiquée après la date de naissance">
-          <div class="help" id="categorieHelp">Renseignez la date de naissance.</div>
-        </div>
-        <div class="full">
-          <label for="creneau">Date d’essai choisie *</label>
-          <select id="creneau" name="creneau" required>
-            <option value="">Renseigner la date de naissance d’abord</option>
-          </select>
-        </div>
-        <div>
-          <label for="parent">Nom du parent *</label>
-          <input id="parent" name="parent" required>
-        </div>
-        <div>
-          <label for="telephone">Téléphone parent *</label>
-          <input id="telephone" name="telephone" type="tel" required>
-        </div>
-        <div class="full">
-          <label for="email">E-mail parent *</label>
-          <input id="email" name="email" type="email" required>
-          <div class="help">Cet e-mail pourra être utilisé pour l’envoi du dossier FFBB si l’inscription est poursuivie.</div>
-        </div>
-        <div class="full">
-          <label for="commentaire">Commentaire utile</label>
-          <textarea id="commentaire" name="commentaire" placeholder="Ex : déjà licencié ailleurs, débutant, contrainte horaire..."></textarea>
-        </div>
-      </div>
-      <div class="actions">
-        <button type="submit" id="submitBtn">Envoyer la demande d’essai</button>
-        <span id="message" class="msg"></span>
-      </div>
-    </form>
-  </section>
-</main>
-
-<footer>ES Blanquefort Basket Ball — Données utilisées uniquement pour organiser les essais et préparer les effectifs.</footer>
-
+<section class="intro"><div class="card"><h2>Principe</h2><p>Les essais sont organisés par <strong>catégorie 2026-2027</strong>. Votre enfant sera orienté vers sa future équipe.</p><div class="warning"><strong>Important :</strong> un formulaire = un essai. Pour deux essais, merci de remplir une deuxième demande.</div><div class="notice">L’e-mail parent renseigné pourra être utilisé pour l’envoi du dossier FFBB si l’inscription se confirme.</div></div><div class="card"><h2>Lieux</h2><p><strong>Fongravey</strong><br><a href="https://www.google.com/maps/search/?api=1&query=10+rue+Jean+Moulin%2C+33290+Blanquefort" target="_blank" rel="noopener" style="color:#0b5c3b;font-weight:800;text-decoration:none">10 rue Jean Moulin, Blanquefort ↗</a></p><p><strong>Port du Roy</strong><br><a href="https://www.google.com/maps/search/?api=1&query=55+Avenue+du+Port+du+Roy%2C+33290+Blanquefort" target="_blank" rel="noopener" style="color:#0b5c3b;font-weight:800;text-decoration:none">55 avenue du Port du Roy, Blanquefort ↗</a></p><p><strong>Contact :</strong><br>contact@es-blanquefort-basketball.fr</p></div></section>
+<section class="card"><h2>Calendrier des essais</h2><div class="legend"><div class="badge u5">U5 — 2022/2023</div><div class="badge u7">U7 — 2020/2021</div><div class="badge u9">U9 — 2018/2019</div><div class="badge u11">U11 — 2016/2017</div><div class="badge u13">U13 — 2014/2015</div><div class="badge u15">U15 — 2012/2013</div><div class="badge u18">U18 — 2009/2010/2011</div></div>
+<div class="calendar" id="calendar"></div></section>
+<section class="card" id="inscription"><h2>Inscription à un essai</h2><form id="essaiForm"><div class="form-grid"><div><label for="prenom">Prénom de l’enfant *</label><input id="prenom" required></div><div><label for="nom">Nom de l’enfant *</label><input id="nom" required></div><div><label for="dateNaissance">Date de naissance *</label><input id="dateNaissance" type="date" required><div class="help">La catégorie saison prochaine sera indiquée automatiquement.</div></div><div><label for="categorie">Catégorie saison prochaine</label><input id="categorie" readonly placeholder="Indiquée après la date de naissance"><div class="help" id="categorieHelp">Renseignez la date de naissance.</div></div><div class="full"><label for="creneau">Date d’essai choisie *</label><select id="creneau" required><option value="">Choisir dans le calendrier ou renseigner la date de naissance</option></select></div><div><label for="parent">Nom du parent *</label><input id="parent" required></div><div><label for="telephone">Téléphone parent *</label><input id="telephone" type="tel" required></div><div class="full"><label for="email">E-mail parent *</label><input id="email" type="email" required><div class="help">Cet e-mail pourra être utilisé pour l’envoi du dossier FFBB si l’inscription est poursuivie.</div></div><div class="full"><label for="commentaire">Commentaire utile</label><textarea id="commentaire" placeholder="Ex : déjà licencié ailleurs, débutant, contrainte horaire..."></textarea></div></div><div class="actions"><button type="submit" class="submit" id="submitBtn">Envoyer la demande d’essai</button><span id="message" class="msg"></span></div></form></section>
+</main><footer>ES Blanquefort Basket Ball — Données utilisées uniquement pour organiser les essais et préparer les effectifs.</footer>
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2isdaOnCpljcE8I1RaBSp8Jflp8-LJjgUgHp8N0l57cV7wpkQvXV4GX01anp-6wJ6CA/exec";
-
-const CRENEAUX_FALLBACK = [
-  {id:"ESS001",date:"20/05/2026",jour:"Mardi",categorie:"U13",debut:"15:00",fin:"16:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS002",date:"25/05/2026",jour:"Lundi",categorie:"U9",debut:"17:30",fin:"",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS003",date:"25/05/2026",jour:"Lundi",categorie:"U11",debut:"19:00",fin:"",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS004",date:"27/05/2026",jour:"Mercredi",categorie:"U15",debut:"19:30",fin:"21:00",lieu:"Port du Roy",adresse:"Adresse Port du Roy à compléter"},
-  {id:"ESS005",date:"27/05/2026",jour:"Mercredi",categorie:"U18",debut:"19:30",fin:"21:00",lieu:"Port du Roy",adresse:"Adresse Port du Roy à compléter"},
-  {id:"ESS006",date:"06/06/2026",jour:"Samedi",categorie:"U13",debut:"10:00",fin:"12:00",lieu:"Port du Roy",adresse:"Adresse Port du Roy à compléter"},
-  {id:"ESS007",date:"06/06/2026",jour:"Samedi",categorie:"U15",debut:"10:00",fin:"12:00",lieu:"Port du Roy",adresse:"Adresse Port du Roy à compléter"},
-  {id:"ESS008",date:"06/06/2026",jour:"Samedi",categorie:"U9",debut:"14:15",fin:"15:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS009",date:"06/06/2026",jour:"Samedi",categorie:"U11",debut:"15:30",fin:"17:00",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS010",date:"03/06/2026",jour:"Mercredi",categorie:"U5",debut:"16:45",fin:"17:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS011",date:"03/06/2026",jour:"Mercredi",categorie:"U7",debut:"17:45",fin:"18:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS012",date:"10/06/2026",jour:"Mercredi",categorie:"U5",debut:"16:45",fin:"17:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS013",date:"10/06/2026",jour:"Mercredi",categorie:"U7",debut:"17:45",fin:"18:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS014",date:"17/06/2026",jour:"Mercredi",categorie:"U5",debut:"16:45",fin:"17:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS015",date:"17/06/2026",jour:"Mercredi",categorie:"U7",debut:"17:45",fin:"18:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS016",date:"24/06/2026",jour:"Mercredi",categorie:"U5",debut:"16:45",fin:"17:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"},
-  {id:"ESS017",date:"24/06/2026",jour:"Mercredi",categorie:"U7",debut:"17:45",fin:"18:30",lieu:"Fongravey",adresse:"Rue Jean Moulin, Blanquefort"}
-];
-
-let creneaux = CRENEAUX_FALLBACK;
-
-const dateNaissanceInput = document.getElementById("dateNaissance");
-const categorieInput = document.getElementById("categorie");
-const categorieHelp = document.getElementById("categorieHelp");
-const creneauSelect = document.getElementById("creneau");
-const form = document.getElementById("essaiForm");
-const message = document.getElementById("message");
-const submitBtn = document.getElementById("submitBtn");
-
-function determinerCategorie2026_2027(dateValue) {
-  if (!dateValue) return "";
-  const year = new Date(dateValue).getFullYear();
-  if (!year || Number.isNaN(year)) return "";
-  if (year === 2022) return "U5";
-  if (year === 2020 || year === 2021) return "U7";
-  if (year === 2018 || year === 2019) return "U9";
-  if (year === 2016 || year === 2017) return "U11";
-  if (year === 2014 || year === 2015) return "U13";
-  if (year === 2012 || year === 2013) return "U15";
-  if (year >= 2009 && year <= 2011) return "U18";
-  if (year <= 2008) return "Seniors";
-  if (year >= 2023) return "Trop jeune";
-  return "À vérifier";
-}
-
-function labelCreneau(c) {
-  const horaire = c.fin ? `${c.debut} → ${c.fin}` : c.debut;
-  return `${c.jour} ${c.date} · ${horaire} · ${c.lieu}`;
-}
-
-function refreshCreneaux() {
-  const cat = categorieInput.value;
-  creneauSelect.innerHTML = "";
-  const empty = document.createElement("option");
-  empty.value = "";
-  empty.textContent = cat && cat !== "Trop jeune" && cat !== "À vérifier" ? "Choisir une date d’essai" : "Catégorie à vérifier";
-  creneauSelect.appendChild(empty);
-
-  if (!cat || cat === "Trop jeune" || cat === "À vérifier") return;
-
-  creneaux.filter(c => c.categorie === cat).forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c.id;
-    opt.textContent = labelCreneau(c);
-    creneauSelect.appendChild(opt);
-  });
-}
-
-function updateCategorie() {
-  const cat = determinerCategorie2026_2027(dateNaissanceInput.value);
-  categorieInput.value = cat;
-  if (!cat) {
-    categorieHelp.textContent = "Renseignez la date de naissance.";
-  } else if (cat === "Trop jeune" || cat === "À vérifier") {
-    categorieHelp.textContent = "Catégorie à vérifier avec le club.";
-  } else {
-    categorieHelp.textContent = `Catégorie saison prochaine : ${cat}.`;
-  }
-  refreshCreneaux();
-}
-
-async function loadCreneaux() {
-  try {
-    const res = await fetch(WEB_APP_URL + "?action=getCreneauxEssais");
-    const json = await res.json();
-    if (json.ok && Array.isArray(json.data) && json.data.length) {
-      creneaux = json.data;
-      refreshCreneaux();
-    }
-  } catch (e) {
-    console.warn("Créneaux fallback utilisés", e);
-  }
-}
-
-dateNaissanceInput.addEventListener("change", updateCategorie);
-dateNaissanceInput.addEventListener("input", updateCategorie);
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  updateCategorie();
-  message.textContent = "";
-  message.className = "msg";
-
-  if (!categorieInput.value || categorieInput.value === "Trop jeune" || categorieInput.value === "À vérifier") {
-    message.textContent = "La catégorie saison prochaine doit être vérifiée avant l’envoi.";
-    message.classList.add("ko");
-    return;
-  }
-
-  const selected = creneaux.find(c => c.id === creneauSelect.value);
-  if (!selected) {
-    message.textContent = "Merci de choisir une date d’essai.";
-    message.classList.add("ko");
-    return;
-  }
-
-  submitBtn.disabled = true;
-
-  const payload = {
-    nom: form.nom.value.trim(),
-    prenom: form.prenom.value.trim(),
-    dateNaissance: form.dateNaissance.value,
-    categorie: categorieInput.value,
-    idEssai: form.creneau.value,
-    creneauLabel: selected ? labelCreneau(selected) : "",
-    lieu: selected ? selected.lieu : "",
-    adresse: selected ? selected.adresse : "",
-    parent: form.parent.value.trim(),
-    telephone: form.telephone.value.trim(),
-    email: form.email.value.trim(),
-    commentaire: form.commentaire.value.trim(),
-    source: "Site public"
-  };
-
-  try {
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "text/plain;charset=utf-8" }
-    });
-    const json = await res.json();
-    if (!json.ok) throw new Error(json.message || "Erreur inconnue");
-
-    message.textContent = "Demande envoyée. Vous recevrez les informations pratiques si besoin. Pour un deuxième essai, merci de remplir une nouvelle demande.";
-    message.classList.add("ok");
-    form.reset();
-    updateCategorie();
-  } catch (err) {
-    message.textContent = "Impossible d’envoyer pour le moment. Merci de réessayer.";
-    message.classList.add("ko");
-    console.error(err);
-  } finally {
-    submitBtn.disabled = false;
-  }
-});
-
-updateCategorie();
-loadCreneaux();
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbx2isdaOnCpljcE8I1RaBSp8Jflp8-LJjgUgHp8N0l57cV7wpkQvXV4GX01anp-6wJ6CA/exec";
+const CRENEAUX=[
+{id:"ESS001",date:"20 mai",jour:"Mardi",categorie:"U13",debut:"15h00",fin:"16h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS002",date:"25 mai",jour:"Lundi",categorie:"U9",debut:"17h30",fin:"",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS003",date:"25 mai",jour:"Lundi",categorie:"U11",debut:"19h00",fin:"",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS004",date:"27 mai",jour:"Mercredi",categorie:"U15",debut:"19h30",fin:"21h00",lieu:"Port du Roy",adresse:"55 Avenue du Port du Roy, 33290 Blanquefort"},
+{id:"ESS005",date:"27 mai",jour:"Mercredi",categorie:"U18",debut:"19h30",fin:"21h00",lieu:"Port du Roy",adresse:"55 Avenue du Port du Roy, 33290 Blanquefort"},
+{id:"ESS006",date:"6 juin",jour:"Samedi",categorie:"U13",debut:"10h00",fin:"12h00",lieu:"Port du Roy",adresse:"55 Avenue du Port du Roy, 33290 Blanquefort"},
+{id:"ESS007",date:"6 juin",jour:"Samedi",categorie:"U15",debut:"10h00",fin:"12h00",lieu:"Port du Roy",adresse:"55 Avenue du Port du Roy, 33290 Blanquefort"},
+{id:"ESS008",date:"6 juin",jour:"Samedi",categorie:"U9",debut:"14h15",fin:"15h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS009",date:"6 juin",jour:"Samedi",categorie:"U11",debut:"15h30",fin:"17h00",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS010",date:"3 juin",jour:"Mercredi",categorie:"U5",debut:"16h45",fin:"17h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS011",date:"3 juin",jour:"Mercredi",categorie:"U7",debut:"17h45",fin:"18h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS012",date:"10 juin",jour:"Mercredi",categorie:"U5",debut:"16h45",fin:"17h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS013",date:"10 juin",jour:"Mercredi",categorie:"U7",debut:"17h45",fin:"18h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS014",date:"17 juin",jour:"Mercredi",categorie:"U5",debut:"16h45",fin:"17h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS015",date:"17 juin",jour:"Mercredi",categorie:"U7",debut:"17h45",fin:"18h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS016",date:"24 juin",jour:"Mercredi",categorie:"U5",debut:"16h45",fin:"17h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"},
+{id:"ESS017",date:"24 juin",jour:"Mercredi",categorie:"U7",debut:"17h45",fin:"18h30",lieu:"Fongravey",adresse:"10 rue Jean Moulin, 33290 Blanquefort"}];
+const days=["Lun.","Mar.","Mer.","Jeu.","Ven.","Sam.","Dim."], dateMap={"20 mai":1,"25 mai":0,"27 mai":2,"3 juin":2,"6 juin":5,"10 juin":2,"17 juin":2,"24 juin":2};
+const groups=["20 mai","25 mai","27 mai","3 juin","6 juin","10 juin","17 juin","24 juin"];
+const calendar=document.getElementById("calendar");days.forEach(d=>calendar.innerHTML+=`<div class="day-name">${d}</div>`);
+groups.forEach(date=>{for(let i=0;i<7;i++){if(i===dateMap[date]){let ev=CRENEAUX.filter(c=>c.date===date).map(c=>`<button type="button" class="event ${c.categorie.toLowerCase()}" data-id="${c.id}">${c.categorie}<small>${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}</small></button>`).join("");calendar.innerHTML+=`<div class="day"><div class="date">${date}</div>${ev}</div>`}else calendar.innerHTML+='<div class="day empty"></div>'}});
+const dateNaissanceInput=document.getElementById("dateNaissance"),categorieInput=document.getElementById("categorie"),categorieHelp=document.getElementById("categorieHelp"),creneauSelect=document.getElementById("creneau"),form=document.getElementById("essaiForm"),message=document.getElementById("message"),submitBtn=document.getElementById("submitBtn");
+function catByBirth(v){if(!v)return"";const y=new Date(v).getFullYear();if(y===2022)return"U5";if(y===2020||y===2021)return"U7";if(y===2018||y===2019)return"U9";if(y===2016||y===2017)return"U11";if(y===2014||y===2015)return"U13";if(y===2012||y===2013)return"U15";if(y>=2009&&y<=2011)return"U18";if(y<=2008)return"Seniors";if(y>=2023)return"Trop jeune";return"À vérifier"}
+function label(c){return `${c.jour} ${c.date} · ${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}`}
+function refresh(){const cat=categorieInput.value, cur=creneauSelect.value;creneauSelect.innerHTML='<option value="">Choisir une date d’essai</option>';if(!cat||cat==="Trop jeune"||cat==="À vérifier")return;CRENEAUX.filter(c=>c.categorie===cat).forEach(c=>{let o=document.createElement("option");o.value=c.id;o.textContent=label(c);creneauSelect.appendChild(o)});if([...creneauSelect.options].some(o=>o.value===cur))creneauSelect.value=cur}
+function updateCat(){const cat=catByBirth(dateNaissanceInput.value);categorieInput.value=cat;categorieHelp.textContent=cat&&cat!=="Trop jeune"&&cat!=="À vérifier"?`Catégorie saison prochaine : ${cat}.`:"Catégorie à vérifier avec le club.";if(!cat)categorieHelp.textContent="Renseignez la date de naissance.";refresh()}
+function selectEvent(id){let c=CRENEAUX.find(x=>x.id===id);if(!c)return;creneauSelect.innerHTML=`<option value="${c.id}">${label(c)}</option>`;creneauSelect.value=c.id;if(!categorieInput.value){categorieInput.value=c.categorie;categorieHelp.textContent=`Catégorie saison prochaine : ${c.categorie}.`}document.getElementById("inscription").scrollIntoView({behavior:"smooth"})}
+document.querySelectorAll(".event").forEach(b=>b.addEventListener("click",()=>selectEvent(b.dataset.id)));
+dateNaissanceInput.addEventListener("input",updateCat);dateNaissanceInput.addEventListener("change",updateCat);
+form.addEventListener("submit",async e=>{e.preventDefault();message.textContent="";message.className="msg";let selected=CRENEAUX.find(c=>c.id===creneauSelect.value);if(!selected){message.textContent="Merci de choisir une date d’essai.";message.classList.add("ko");return}submitBtn.disabled=true;let payload={nom:nom.value.trim(),prenom:prenom.value.trim(),dateNaissance:dateNaissanceInput.value,categorie:categorieInput.value,idEssai:selected.id,creneauLabel:label(selected),lieu:selected.lieu,adresse:selected.adresse,parent:parent.value.trim(),telephone:telephone.value.trim(),email:email.value.trim(),commentaire:commentaire.value.trim(),source:"Site public"};try{let res=await fetch(WEB_APP_URL,{method:"POST",body:JSON.stringify(payload),headers:{"Content-Type":"text/plain;charset=utf-8"}});let json=await res.json();if(!json.ok)throw Error(json.message);message.textContent="Demande envoyée. Pour un deuxième essai, merci de remplir une nouvelle demande.";message.classList.add("ok");form.reset();updateCat()}catch(err){message.textContent="Impossible d’envoyer pour le moment. Merci de réessayer.";message.classList.add("ko");console.error(err)}finally{submitBtn.disabled=false}});
+updateCat();
 </script>
-</body>
-</html>
+</body></html>
