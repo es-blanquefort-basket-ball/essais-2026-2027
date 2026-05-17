@@ -124,18 +124,16 @@ function sortCreneaux(list){return [...list].sort((a,b)=>parseCreneauDate(a.date
 function label(c){return `${c.jour} ${c.date} · ${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}${c.statut&&c.statut!=='Ouvert'?' · '+c.statut:''}`;}
 function baseCatByBirth(v, sexe){let d=parseDateInput(v);if(!d)return"";let y=d.getFullYear();if(y===2022||y===2023)return"U5";if(y===2020||y===2021)return"U7";if(y===2018||y===2019)return"U9";if(y===2016||y===2017)return"U11";if(y===2014||y===2015)return sexe==="F"?"U13F":"U13M";if(y===2012||y===2013)return sexe==="F"?"U15F":"U15M";if(y>=2009&&y<=2011)return"U18M";if(y>=2006&&y<=2008)return"U21";if(y<=2005)return"Seniors";return"À vérifier"}
 function isMineur(cat){return ["U5","U7","U9","U11","U13M","U13F","U15M","U18M"].includes(cat)}
-function compatible(c, cat){return c.categorie===cat;}
+function compatible(c, cat){return c.categorie === esbbCategorieCreneauxEssai(cat);}
 
 function categoriePourCreneauxEssais(cat){
-  const c = String(cat || "").trim();
-  if (c.indexOf("U15F") === 0) return "U13F";
-  return c;
+  return esbbCategorieCreneauxEssai(cat);
 }
 
 function updateCat(){let cat=baseCatByBirth(dateNaissance.value,sexe.value);categorie.value=cat;let mineur=isMineur(cat);parentBox.classList.toggle("hidden",!mineur);parentNom.required=mineur;telephoneLabel.textContent=mineur?"Téléphone parent *":"Téléphone joueur *";emailLabel.textContent=mineur?"E-mail parent *":"E-mail joueur *";categorieHelp.textContent=cat&&cat!=="À vérifier"?`Catégorie calculée : ${cat}`:"Catégorie à vérifier.";refreshCreneaux();}
 function refreshCreneaux(){let cat=categorie.value, cur=creneau.value;creneau.innerHTML='<option value="">Choisir une date d’essai</option>';creneauxList.innerHTML="";if(!cat||cat==="À vérifier")return;let list=sortCreneaux(CRENEAUX.filter(c=>compatible(c,cat)));if(!list.length){creneauxList.innerHTML='<div class="warning">Aucun créneau affiché pour cette catégorie pour le moment. Contactez le club.</div>';return;}list.forEach(c=>{let o=document.createElement("option");o.value=c.id;o.textContent=label(c);creneau.appendChild(o);let b=document.createElement("button");b.type="button";b.className="creneau-card"+(c.statut==='À confirmer'?' pending':'')+(c.id===cur?' active':'');b.innerHTML=`${c.categorie} — ${c.jour} ${c.date}<small>${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}${c.statut==='À confirmer'?' · À confirmer':''}</small>`;b.onclick=()=>{creneau.value=c.id;refreshCreneaux();};creneauxList.appendChild(b);});if([...creneau.options].some(o=>o.value===cur))creneau.value=cur;}
-function renderCategoryButtons(){categoryButtons.innerHTML="";CAT_ORDER.forEach(cat=>{if(!CRENEAUX.some(c=>c.categorie===cat))return;let b=document.createElement("button");b.type="button";b.className="cat-btn";b.textContent=cat;b.onclick=()=>renderCategory(cat,b);categoryButtons.appendChild(b);})}
-function renderCategory(cat,btn){document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");let list=sortCreneaux(CRENEAUX.filter(c=>c.categorie===cat));categoryResults.innerHTML=`<h3>${cat}</h3>`+list.map(c=>`<div class="creneau-card ${c.statut==='À confirmer'?'pending':''}">${c.jour} ${c.date}<small>${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}${c.statut==='À confirmer'?' · À confirmer':''}</small></div>`).join("");}
+function renderCategoryButtons(){categoryButtons.innerHTML="";CAT_ORDER.forEach(cat=>{if(!CRENEAUX.some(c=>c.categorie === esbbCategorieCreneauxEssai(cat)))return;let b=document.createElement("button");b.type="button";b.className="cat-btn";b.textContent=cat;b.onclick=()=>renderCategory(cat,b);categoryButtons.appendChild(b);})}
+function renderCategory(cat,btn){document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");let list=sortCreneaux(CRENEAUX.filter(c=>c.categorie === esbbCategorieCreneauxEssai(cat)));categoryResults.innerHTML=`<h3>${cat}</h3>`+list.map(c=>`<div class="creneau-card ${c.statut==='À confirmer'?'pending':''}">${c.jour} ${c.date}<small>${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}${c.statut==='À confirmer'?' · À confirmer':''}</small></div>`).join("");}
 
 function formatBirthDateLive(value){
   const digits = String(value || "").replace(/\D/g, "").slice(0, 8);
@@ -302,9 +300,7 @@ function esbbCategorieCorrigeePourEssais(cat){
 }
 
 function esbbGroupeCreneauxEssais(cat){
-  const c = String(cat || "").trim();
-  if (c.indexOf("U15F") === 0) return "U13F";
-  return c;
+  return esbbCategorieCreneauxEssai(cat);
 }
 
 function esbbApplyU15FCorrection(){
@@ -325,6 +321,73 @@ document.addEventListener("input", function(e){
     setTimeout(esbbApplyU15FCorrection, 0);
   }
 });
+
+
+/* ===== FIX FINAL U15F -> CRÉNEAUX U13F ===== */
+function esbbCategorieAfficheeEssai(cat){
+  const c = String(cat || "").trim();
+  if (c.indexOf("U15F") === 0) return "U15F";
+  return c;
+}
+function esbbCategorieCreneauxEssai(cat){
+  const c = String(cat || "").trim();
+  if (c.indexOf("U15F") === 0) return "U13F";
+  return c;
+}
+function esbbValeurCategorieActuelle(){
+  const el = document.querySelector('#categorie') || document.querySelector('[name="categorie"]');
+  return el ? String(el.value || "").trim() : "";
+}
+function esbbForceRefreshCreneauxU15F(){
+  const cat = esbbValeurCategorieActuelle();
+  const group = esbbCategorieCreneauxEssai(cat);
+
+  // Force les éventuels champs cachés / variables visuelles si présents
+  const hidden = document.querySelector('#groupeEssai') || document.querySelector('[name="groupeEssai"]');
+  if (hidden) hidden.value = group;
+
+  // Si une fonction de rendu existe, on la relance
+  const candidates = [
+    "renderCreneaux",
+    "renderSlots",
+    "renderDates",
+    "afficherCreneaux",
+    "updateCreneaux",
+    "updateSlots",
+    "refreshCreneaux",
+    "renderAvailableSlots"
+  ];
+  for (const fn of candidates) {
+    if (typeof window[fn] === "function") {
+      try { window[fn](); } catch(e) {}
+    }
+  }
+}
+document.addEventListener("change", function(e){
+  if(e.target && (e.target.name === "sexe" || e.target.id === "sexe" || e.target.id === "dateNaissance" || e.target.name === "dateNaissance")){
+    setTimeout(esbbForceRefreshCreneauxU15F, 50);
+  }
+});
+document.addEventListener("input", function(e){
+  if(e.target && (e.target.id === "dateNaissance" || e.target.name === "dateNaissance")){
+    setTimeout(esbbForceRefreshCreneauxU15F, 50);
+  }
+});
+
+
+(function(){
+  const names = ["CRENEAUX_ESSAIS","creneauxEssais","CRENEAUX","creneaux"];
+  names.forEach(function(n){
+    try{
+      const arr = window[n];
+      if(Array.isArray(arr) && !arr.__u15fDone){
+        const extra = arr.filter(x => String(x.categorie || "").trim() === "U13F").map(x => Object.assign({}, x, {categorie:"U15F"}));
+        extra.forEach(x => arr.push(x));
+        arr.__u15fDone = true;
+      }
+    }catch(e){}
+  });
+})();
 
 </script>
 </body>
