@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#003914">
 <title>Essais Basket 2026-2027 — ES Blanquefort Basket Ball</title>
-<style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=1GtatM9kr7dOZ6LHJTbjD0gmTS7DGBPTKm92zbH0gTTLRWO9HMR5QamG5cLUnZgsqL8QBzkMWuCyCbEbqpZXUkuviwALQNMOe3oanDkX1mDSzZ31WLPVnFLfeI0MHQbXyj8s-UWVufKgbkwDQbr-sprK4WNrahE56H9eG9IwNY-xRT1BhmzCspn17HMbNghuxWONgVhiSRZVJ2bSzdISNhNFONXqY4HNd4iHT9DbxyvvwzjO875hyZpIXjd4kPGDVqGKPoxh90EfAuQ_pJ9J7A" charset="UTF-8"></script><style>
 :root{--green:#003914;--green2:#0b6b2b;--dark:#10251c;--muted:#6b7b73;--danger:#b42318;--line:rgba(0,57,20,.16)}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(135deg,#fff 0%,#eef6f2 100%);color:var(--dark)}
@@ -122,7 +122,7 @@ function isoDate(v){let d=parseDateInput(v);if(!d)return"";return d.getFullYear(
 function parseCreneauDate(s){let [d,m,y]=String(s).split("/").map(Number);return new Date(y,m-1,d).getTime();}
 function sortCreneaux(list){return [...list].sort((a,b)=>parseCreneauDate(a.date)-parseCreneauDate(b.date)||a.debut.localeCompare(b.debut)||CAT_ORDER.indexOf(a.categorie)-CAT_ORDER.indexOf(b.categorie));}
 function label(c){return `${c.jour} ${c.date} · ${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}${c.statut&&c.statut!=='Ouvert'?' · '+c.statut:''}`;}
-function baseCatByBirth(v, sexe){let d=parseDateInput(v);if(!d)return"";let y=d.getFullYear();if(y===2022||y===2023)return"U5";if(y===2020||y===2021)return"U7";if(y===2018||y===2019)return"U9";if(y===2016||y===2017)return"U11";if(y===2014||y===2015)return sexe==="F"?"U13F":"U13M";if(y===2012||y===2013)return"U15M";if(y>=2009&&y<=2011)return"U18M";if(y>=2006&&y<=2008)return"U21";if(y<=2005)return"Seniors";return"À vérifier"}
+function baseCatByBirth(v, sexe){let d=parseDateInput(v);if(!d)return"";let y=d.getFullYear();if(y===2022||y===2023)return"U5";if(y===2020||y===2021)return"U7";if(y===2018||y===2019)return"U9";if(y===2016||y===2017)return"U11";if(y===2014||y===2015)return sexe==="F"?"U13F":"U13M";if (year === 2012 || year === 2013) return esbbIsFemaleSelected() ? "U15F — essai U13F" : "U15M";if(y>=2009&&y<=2011)return"U18M";if(y>=2006&&y<=2008)return"U21";if(y<=2005)return"Seniors";return"À vérifier"}
 function isMineur(cat){return ["U5","U7","U9","U11","U13M","U13F","U15M","U18M"].includes(cat)}
 function compatible(c, cat){return c.categorie===cat;}
 
@@ -245,8 +245,8 @@ function downloadEssaiCalendar(c){
 }
 let lastSelectedCreneau = null;
 
-essaiForm.addEventListener("submit",async(e)=>{e.preventDefault();let c=CRENEAUX.find(x=>x.id===creneau.value);if(!c){showMsg("Merci de choisir un créneau.", "ko");return;}updateCat();if(isMineur(categorie.value)&&!parentNom.value.trim()){showMsg("Nom du parent obligatoire pour un mineur.", "ko");return;}let dateIso=isoDate(dateNaissance.value);if(!dateIso){showMsg("Merci de saisir une date au format jj/mm/aaaa.", "ko");return;}let data={action:"saveEssaiBasket",data:{nom:nom.value.trim(),prenom:prenom.value.trim(),dateNaissance:dateIso,sexe:sexe.value,categorie:categorie.value,
-      groupeEssai:categoriePourCreneauxEssais(categorie.value),idEssai:c.id,creneauLabel:label(c),lieu:c.lieu,adresse:c.adresse,parentNom:parentNom.value.trim(),telephone:telephone.value.trim(),email:email.value.trim(),commentaire:commentaire.value.trim(),source:"Site public essais 2026-2027"}};submitBtn.disabled=true;showMsg("Envoi en cours...", "ok");try{await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});essaiForm.classList.add("hidden");successTitle.textContent=`Merci, ${prenom.value.trim()} est bien inscrit(e) aux essais.`;successText.textContent=`Créneau : ${label(c)}`;lastSelectedCreneau=c;downloadSummaryBtn.onclick=()=>downloadEssaiSummary(lastSelectedCreneau);copySummaryBtn.onclick=()=>copyEssaiSummary(lastSelectedCreneau);downloadCalendarBtn.onclick=()=>downloadEssaiCalendar(lastSelectedCreneau);successCard.classList.add("visible");}catch(err){showMsg("L’envoi n’a pas abouti. Merci de réessayer ou de contacter le club.", "ko");}finally{submitBtn.disabled=false;}});
+essaiForm.addEventListener("submit",async(e)=>{e.preventDefault();let c=CRENEAUX.find(x=>x.id===creneau.value);if(!c){showMsg("Merci de choisir un créneau.", "ko");return;}updateCat();if(isMineur(categorie.value)&&!parentNom.value.trim()){showMsg("Nom du parent obligatoire pour un mineur.", "ko");return;}let dateIso=isoDate(dateNaissance.value);if(!dateIso){showMsg("Merci de saisir une date au format jj/mm/aaaa.", "ko");return;}let data={action:"saveEssaiBasket",data:{nom:nom.value.trim(),prenom:prenom.value.trim(),dateNaissance:dateIso,sexe:sexe.value,categorie:esbbCategorieCorrigeePourEssais(categorie.value),
+      groupeEssai:esbbGroupeCreneauxEssais(esbbCategorieCorrigeePourEssais(categorie.value)),idEssai:c.id,creneauLabel:label(c),lieu:c.lieu,adresse:c.adresse,parentNom:parentNom.value.trim(),telephone:telephone.value.trim(),email:email.value.trim(),commentaire:commentaire.value.trim(),source:"Site public essais 2026-2027"}};submitBtn.disabled=true;showMsg("Envoi en cours...", "ok");try{await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});essaiForm.classList.add("hidden");successTitle.textContent=`Merci, ${prenom.value.trim()} est bien inscrit(e) aux essais.`;successText.textContent=`Créneau : ${label(c)}`;lastSelectedCreneau=c;downloadSummaryBtn.onclick=()=>downloadEssaiSummary(lastSelectedCreneau);copySummaryBtn.onclick=()=>copyEssaiSummary(lastSelectedCreneau);downloadCalendarBtn.onclick=()=>downloadEssaiCalendar(lastSelectedCreneau);successCard.classList.add("visible");}catch(err){showMsg("L’envoi n’a pas abouti. Merci de réessayer ou de contacter le club.", "ko");}finally{submitBtn.disabled=false;}});
 function mergeCreneaux(localList, remoteList){
   const map = new Map();
   [...localList, ...(Array.isArray(remoteList) ? remoteList : [])].forEach(c => {
@@ -268,6 +268,64 @@ async function loadCreneaux(){
   updateCat();
 }
 loadCreneaux();
+
+/* ===== CORRECTIF U15F ESSAI AVEC U13F ===== */
+function esbbGetSexeValue(){
+  const el = document.querySelector('[name="sexe"]:checked') ||
+             document.querySelector('#sexe') ||
+             document.querySelector('[name="sexe"]');
+  return el ? String(el.value || "").trim().toUpperCase() : "";
+}
+
+function esbbIsFemaleSelected(){
+  const s = esbbGetSexeValue();
+  return s === "F" || s.indexOf("FILLE") !== -1 || s.indexOf("FEMININ") !== -1 || s.indexOf("FÉMININ") !== -1;
+}
+
+function esbbBirthYearFromInput(){
+  const el = document.querySelector('#dateNaissance') || document.querySelector('[name="dateNaissance"]');
+  const v = el ? String(el.value || "").trim() : "";
+  const mFr = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (mFr) return Number(mFr[3]);
+  const mIso = v.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (mIso) return Number(mIso[1]);
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? null : d.getFullYear();
+}
+
+function esbbCategorieCorrigeePourEssais(cat){
+  const y = esbbBirthYearFromInput();
+  if ((y === 2012 || y === 2013) && esbbIsFemaleSelected()) {
+    return "U15F — essai U13F";
+  }
+  return cat;
+}
+
+function esbbGroupeCreneauxEssais(cat){
+  const c = String(cat || "").trim();
+  if (c.indexOf("U15F") === 0) return "U13F";
+  return c;
+}
+
+function esbbApplyU15FCorrection(){
+  const catEl = document.querySelector('#categorie') || document.querySelector('[name="categorie"]');
+  if (!catEl) return;
+  const corrected = esbbCategorieCorrigeePourEssais(catEl.value);
+  if (corrected && corrected !== catEl.value) {
+    catEl.value = corrected;
+  }
+}
+document.addEventListener("change", function(e){
+  if(e.target && (e.target.name === "sexe" || e.target.id === "sexe" || e.target.id === "dateNaissance" || e.target.name === "dateNaissance")){
+    setTimeout(esbbApplyU15FCorrection, 0);
+  }
+});
+document.addEventListener("input", function(e){
+  if(e.target && (e.target.id === "dateNaissance" || e.target.name === "dateNaissance")){
+    setTimeout(esbbApplyU15FCorrection, 0);
+  }
+});
+
 </script>
 </body>
 </html>
