@@ -74,8 +74,8 @@ footer{text-align:center;color:rgba(16,37,28,.74);padding:0 18px 30px;font-weigh
       <div><label>Nom *</label><input id="nom" required autocomplete="family-name"></div>
       <div>
         <label>Date de naissance *</label>
-        <input id="dateNaissance" type="text" inputmode="numeric" required placeholder="jj/mm/aaaa ou jj-mm-aaaa">
-        <div class="help">Saisie possible au clavier : 27/10/2018 par exemple.</div>
+        <input id="dateNaissance" type="text" inputmode="numeric" required placeholder="jjmmaaaa">
+        <div class="help">Tapez seulement les chiffres : 27102018 devient 27/10/2018.</div>
       </div>
       <div><label>Sexe *</label><select id="sexe" required><option value="">Choisir</option><option value="F">Féminin</option><option value="M">Masculin</option></select></div>
       <div><label>Catégorie saison prochaine</label><input id="categorie" readonly placeholder="Indiquée après la date de naissance"><div class="help" id="categorieHelp">Renseignez la date de naissance.</div></div>
@@ -119,7 +119,21 @@ function updateCat(){let cat=baseCatByBirth(dateNaissance.value,sexe.value);cate
 function refreshCreneaux(){let cat=categorie.value, cur=creneau.value;creneau.innerHTML='<option value="">Choisir une date d’essai</option>';creneauxList.innerHTML="";if(!cat||cat==="À vérifier")return;let list=sortCreneaux(CRENEAUX.filter(c=>compatible(c,cat)));if(!list.length){creneauxList.innerHTML='<div class="warning">Aucun créneau affiché pour cette catégorie pour le moment. Contactez le club.</div>';return;}list.forEach(c=>{let o=document.createElement("option");o.value=c.id;o.textContent=label(c);creneau.appendChild(o);let b=document.createElement("button");b.type="button";b.className="creneau-card"+(c.statut==='À confirmer'?' pending':'')+(c.id===cur?' active':'');b.innerHTML=`${c.categorie} — ${c.jour} ${c.date}<small>${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}${c.statut==='À confirmer'?' · À confirmer':''}</small>`;b.onclick=()=>{creneau.value=c.id;refreshCreneaux();};creneauxList.appendChild(b);});if([...creneau.options].some(o=>o.value===cur))creneau.value=cur;}
 function renderCategoryButtons(){categoryButtons.innerHTML="";CAT_ORDER.forEach(cat=>{if(!CRENEAUX.some(c=>c.categorie===cat))return;let b=document.createElement("button");b.type="button";b.className="cat-btn";b.textContent=cat;b.onclick=()=>renderCategory(cat,b);categoryButtons.appendChild(b);})}
 function renderCategory(cat,btn){document.querySelectorAll(".cat-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");let list=sortCreneaux(CRENEAUX.filter(c=>c.categorie===cat));categoryResults.innerHTML=`<h3>${cat}</h3>`+list.map(c=>`<div class="creneau-card ${c.statut==='À confirmer'?'pending':''}">${c.jour} ${c.date}<small>${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}${c.statut==='À confirmer'?' · À confirmer':''}</small></div>`).join("");}
-dateNaissance.addEventListener("input",updateCat);sexe.addEventListener("change",updateCat);creneau.addEventListener("change",refreshCreneaux);
+
+function formatBirthDateLive(value){
+  const digits = String(value || "").replace(/\D/g, "").slice(0, 8);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return digits.slice(0,2) + "/" + digits.slice(2);
+  return digits.slice(0,2) + "/" + digits.slice(2,4) + "/" + digits.slice(4);
+}
+function handleBirthDateInput(){
+  const before = dateNaissance.value;
+  const after = formatBirthDateLive(before);
+  if (before !== after) dateNaissance.value = after;
+  updateCat();
+}
+
+dateNaissance.addEventListener("input",handleBirthDateInput);sexe.addEventListener("change",updateCat);creneau.addEventListener("change",refreshCreneaux);
 function showMsg(text,type){message.textContent=text;message.className="msg "+type;}
 essaiForm.addEventListener("submit",async(e)=>{e.preventDefault();let c=CRENEAUX.find(x=>x.id===creneau.value);if(!c){showMsg("Merci de choisir un créneau.", "ko");return;}updateCat();if(isMineur(categorie.value)&&!parentNom.value.trim()){showMsg("Nom du parent obligatoire pour un mineur.", "ko");return;}let dateIso=isoDate(dateNaissance.value);if(!dateIso){showMsg("Merci de saisir une date au format jj/mm/aaaa.", "ko");return;}let data={action:"saveEssaiBasket",data:{nom:nom.value.trim(),prenom:prenom.value.trim(),dateNaissance:dateIso,sexe:sexe.value,categorie:categorie.value,idEssai:c.id,creneauLabel:label(c),lieu:c.lieu,adresse:c.adresse,parentNom:parentNom.value.trim(),telephone:telephone.value.trim(),email:email.value.trim(),commentaire:commentaire.value.trim(),source:"Site public essais 2026-2027"}};submitBtn.disabled=true;showMsg("Envoi en cours...", "ok");try{await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});essaiForm.classList.add("hidden");successTitle.textContent=`Merci, ${prenom.value.trim()} est bien inscrit(e) aux essais.`;successText.textContent=`Créneau : ${label(c)}`;successCard.classList.add("visible");}catch(err){showMsg("L’envoi n’a pas abouti. Merci de réessayer ou de contacter le club.", "ko");}finally{submitBtn.disabled=false;}});
 function mergeCreneaux(localList, remoteList){
