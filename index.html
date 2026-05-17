@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#003914">
 <title>Essais Basket 2026-2027 — ES Blanquefort Basket Ball</title>
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=1GtatM9kr7dOZ6LHJTbjD0gmTS7DGBPTKm92zbH0gTTLRWO9HMR5QamG5cLUnZgsqL8QBzkMWuCyCbEbqpZXUkuviwALQNMOe3oanDkX1mDSzZ31WLPVnFLfeI0MHQbXyj8s-UWVufKgbkwDQbr-sprK4WNrahE56H9eG9IwNY-xRT1BhmzCspn17HMbNghuxWONgVhiSRZVJ2bSzdISNhNFONXqY4HNd4iHT9DbxyvvwzjO875hyZpIXjd4kPGDVqGKPoxh90EfAuQ_pJ9J7A" charset="UTF-8"></script><style>
+<style>
 :root{--green:#003914;--green2:#0b6b2b;--dark:#10251c;--muted:#6b7b73;--danger:#b42318;--line:rgba(0,57,20,.16)}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(135deg,#fff 0%,#eef6f2 100%);color:var(--dark)}
@@ -122,7 +122,7 @@ function isoDate(v){let d=parseDateInput(v);if(!d)return"";return d.getFullYear(
 function parseCreneauDate(s){let [d,m,y]=String(s).split("/").map(Number);return new Date(y,m-1,d).getTime();}
 function sortCreneaux(list){return [...list].sort((a,b)=>parseCreneauDate(a.date)-parseCreneauDate(b.date)||a.debut.localeCompare(b.debut)||CAT_ORDER.indexOf(a.categorie)-CAT_ORDER.indexOf(b.categorie));}
 function label(c){return `${c.jour} ${c.date} · ${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}${c.statut&&c.statut!=='Ouvert'?' · '+c.statut:''}`;}
-function baseCatByBirth(v, sexe){let d=parseDateInput(v);if(!d)return"";let y=d.getFullYear();if(y===2022||y===2023)return"U5";if(y===2020||y===2021)return"U7";if(y===2018||y===2019)return"U9";if(y===2016||y===2017)return"U11";if(y===2014||y===2015)return sexe==="F"?"U13F":"U13M";if (year === 2012 || year === 2013) return esbbIsFemaleSelected() ? "U15F — essai U13F" : "U15M";if(y>=2009&&y<=2011)return"U18M";if(y>=2006&&y<=2008)return"U21";if(y<=2005)return"Seniors";return"À vérifier"}
+function baseCatByBirth(v, sexe){let d=parseDateInput(v);if(!d)return"";let y=d.getFullYear();if(y===2022||y===2023)return"U5";if(y===2020||y===2021)return"U7";if(y===2018||y===2019)return"U9";if(y===2016||y===2017)return"U11";if(y===2014||y===2015)return sexe==="F"?"U13F":"U13M";if(y===2012||y===2013)return sexe==="F"?"U15F — essai U13F":"U15M";if(y>=2009&&y<=2011)return"U18M";if(y>=2006&&y<=2008)return"U21";if(y<=2005)return"Seniors";return"À vérifier"}
 function isMineur(cat){return ["U5","U7","U9","U11","U13M","U13F","U15M","U18M"].includes(cat)}
 function compatible(c, cat){return c.categorie===cat;}
 
