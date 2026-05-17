@@ -1,0 +1,21 @@
+ESSAIS ESBB V13 — ÉCOLE DE BASKET
+
+GitHub :
+- remplacer essais-2026-2027/index.html
+- remplacer essais-2026-2027/manifest.json
+
+Apps Script :
+- remplacer le fichier module_essais_2026_2027.gs par le code :
+  apps-script/module_essais_2026_2027_V13.gs
+
+Puis lancer :
+setupEssais2026_2027()
+
+Puis redéployer Apps Script :
+Déployer → Gérer les déploiements → Modifier → Nouvelle version → Déployer
+
+Mise à jour :
+- U5 / U7 / U9 / U11 : tous les mercredis de juin 2026
+- 03/06, 10/06, 17/06, 24/06
+- charte graphique ESBB
+- formulaire essais connecté au Sheet Pilot
