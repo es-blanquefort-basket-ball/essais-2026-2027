@@ -122,14 +122,14 @@ function isoDate(v){let d=parseDateInput(v);if(!d)return"";return d.getFullYear(
 function parseCreneauDate(s){let [d,m,y]=String(s).split("/").map(Number);return new Date(y,m-1,d).getTime();}
 function sortCreneaux(list){return [...list].sort((a,b)=>parseCreneauDate(a.date)-parseCreneauDate(b.date)||a.debut.localeCompare(b.debut)||CAT_ORDER.indexOf(a.categorie)-CAT_ORDER.indexOf(b.categorie));}
 function label(c){return `${c.jour} ${c.date} · ${c.debut}${c.fin?' → '+c.fin:''} · ${c.lieu}${c.statut&&c.statut!=='Ouvert'?' · '+c.statut:''}`;}
-function baseCatByBirth(v, sexe){let d=parseDateInput(v);if(!d)return"";let y=d.getFullYear();if(y===2022||y===2023)return"U5";if(y===2020||y===2021)return"U7";if(y===2018||y===2019)return"U9";if(y===2016||y===2017)return"U11";if(y===2014||y===2015)return sexe==="F"?"U13F":"U13M";if(y===2012||y===2013)return sexe==="F"?"U15F — essai U13F":"U15M";if(y>=2009&&y<=2011)return"U18M";if(y>=2006&&y<=2008)return"U21";if(y<=2005)return"Seniors";return"À vérifier"}
+function baseCatByBirth(v, sexe){let d=parseDateInput(v);if(!d)return"";let y=d.getFullYear();if(y===2022||y===2023)return"U5";if(y===2020||y===2021)return"U7";if(y===2018||y===2019)return"U9";if(y===2016||y===2017)return"U11";if(y===2014||y===2015)return sexe==="F"?"U13F":"U13M";if(y===2012||y===2013)return sexe==="F"?"U15F":"U15M";if(y>=2009&&y<=2011)return"U18M";if(y>=2006&&y<=2008)return"U21";if(y<=2005)return"Seniors";return"À vérifier"}
 function isMineur(cat){return ["U5","U7","U9","U11","U13M","U13F","U15M","U18M"].includes(cat)}
 function compatible(c, cat){return c.categorie===cat;}
 
 function categoriePourCreneauxEssais(cat){
-  const value = String(cat || "").trim();
-  if (value.indexOf("U15F") === 0) return "U13F";
-  return value;
+  const c = String(cat || "").trim();
+  if (c.indexOf("U15F") === 0) return "U13F";
+  return c;
 }
 
 function updateCat(){let cat=baseCatByBirth(dateNaissance.value,sexe.value);categorie.value=cat;let mineur=isMineur(cat);parentBox.classList.toggle("hidden",!mineur);parentNom.required=mineur;telephoneLabel.textContent=mineur?"Téléphone parent *":"Téléphone joueur *";emailLabel.textContent=mineur?"E-mail parent *":"E-mail joueur *";categorieHelp.textContent=cat&&cat!=="À vérifier"?`Catégorie calculée : ${cat}`:"Catégorie à vérifier.";refreshCreneaux();}
@@ -246,7 +246,7 @@ function downloadEssaiCalendar(c){
 let lastSelectedCreneau = null;
 
 essaiForm.addEventListener("submit",async(e)=>{e.preventDefault();let c=CRENEAUX.find(x=>x.id===creneau.value);if(!c){showMsg("Merci de choisir un créneau.", "ko");return;}updateCat();if(isMineur(categorie.value)&&!parentNom.value.trim()){showMsg("Nom du parent obligatoire pour un mineur.", "ko");return;}let dateIso=isoDate(dateNaissance.value);if(!dateIso){showMsg("Merci de saisir une date au format jj/mm/aaaa.", "ko");return;}let data={action:"saveEssaiBasket",data:{nom:nom.value.trim(),prenom:prenom.value.trim(),dateNaissance:dateIso,sexe:sexe.value,categorie:esbbCategorieCorrigeePourEssais(categorie.value),
-      groupeEssai:esbbGroupeCreneauxEssais(esbbCategorieCorrigeePourEssais(categorie.value)),idEssai:c.id,creneauLabel:label(c),lieu:c.lieu,adresse:c.adresse,parentNom:parentNom.value.trim(),telephone:telephone.value.trim(),email:email.value.trim(),commentaire:commentaire.value.trim(),source:"Site public essais 2026-2027"}};submitBtn.disabled=true;showMsg("Envoi en cours...", "ok");try{await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});essaiForm.classList.add("hidden");successTitle.textContent=`Merci, ${prenom.value.trim()} est bien inscrit(e) aux essais.`;successText.textContent=`Créneau : ${label(c)}`;lastSelectedCreneau=c;downloadSummaryBtn.onclick=()=>downloadEssaiSummary(lastSelectedCreneau);copySummaryBtn.onclick=()=>copyEssaiSummary(lastSelectedCreneau);downloadCalendarBtn.onclick=()=>downloadEssaiCalendar(lastSelectedCreneau);successCard.classList.add("visible");}catch(err){showMsg("L’envoi n’a pas abouti. Merci de réessayer ou de contacter le club.", "ko");}finally{submitBtn.disabled=false;}});
+      groupeEssai:categoriePourCreneauxEssais(categorie.value),idEssai:c.id,creneauLabel:label(c),lieu:c.lieu,adresse:c.adresse,parentNom:parentNom.value.trim(),telephone:telephone.value.trim(),email:email.value.trim(),commentaire:commentaire.value.trim(),source:"Site public essais 2026-2027"}};submitBtn.disabled=true;showMsg("Envoi en cours...", "ok");try{await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});essaiForm.classList.add("hidden");successTitle.textContent=`Merci, ${prenom.value.trim()} est bien inscrit(e) aux essais.`;successText.textContent=`Créneau : ${label(c)}`;lastSelectedCreneau=c;downloadSummaryBtn.onclick=()=>downloadEssaiSummary(lastSelectedCreneau);copySummaryBtn.onclick=()=>copyEssaiSummary(lastSelectedCreneau);downloadCalendarBtn.onclick=()=>downloadEssaiCalendar(lastSelectedCreneau);successCard.classList.add("visible");}catch(err){showMsg("L’envoi n’a pas abouti. Merci de réessayer ou de contacter le club.", "ko");}finally{submitBtn.disabled=false;}});
 function mergeCreneaux(localList, remoteList){
   const map = new Map();
   [...localList, ...(Array.isArray(remoteList) ? remoteList : [])].forEach(c => {
@@ -296,7 +296,7 @@ function esbbBirthYearFromInput(){
 function esbbCategorieCorrigeePourEssais(cat){
   const y = esbbBirthYearFromInput();
   if ((y === 2012 || y === 2013) && esbbIsFemaleSelected()) {
-    return "U15F — essai U13F";
+    return "U15F";
   }
   return cat;
 }
