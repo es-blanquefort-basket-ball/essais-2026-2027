@@ -44,6 +44,10 @@ input[readonly]{background:#eff8f3;color:var(--green);font-weight:900}
 .success-card{display:none;text-align:center;padding:28px;border-radius:18px;background:#eaf4e9;border:1px solid rgba(0,57,20,.16)}
 .success-card.visible{display:block}
 .success-card h2{font-size:30px;color:#003914;margin-bottom:10px}
+.success-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.success-actions button,.success-actions a{border:0;border-radius:999px;padding:12px 14px;background:#003914;color:#fff;font-weight:1000;text-decoration:none;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center}
+.success-actions .light{background:#fff;color:#003914;border:1px solid rgba(0,57,20,.24)}
+@media(max-width:760px){.success-actions{grid-template-columns:1fr}}
 footer{text-align:center;color:rgba(16,37,28,.74);padding:0 18px 30px;font-weight:900}
 @media(max-width:760px){.form-grid{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
@@ -95,6 +99,12 @@ footer{text-align:center;color:rgba(16,37,28,.74);padding:0 18px 30px;font-weigh
     <h2 id="successTitle">Merci, inscription reçue.</h2>
     <p id="successText"></p>
     <p><strong>Le club ne vous recontactera que si le créneau n’est finalement pas possible ou si une information manque.</strong></p>
+    <div class="success-actions">
+      <button type="button" id="downloadSummaryBtn">Télécharger le récapitulatif</button>
+      <button type="button" id="copySummaryBtn" class="light">Copier les infos</button>
+      <button type="button" id="downloadCalendarBtn" class="light">Ajouter à mon agenda</button>
+    </div>
+    <div id="copyStatus" class="help" style="margin-top:10px"></div>
   </div>
 </section>
 
@@ -135,7 +145,100 @@ function handleBirthDateInput(){
 
 dateNaissance.addEventListener("input",handleBirthDateInput);sexe.addEventListener("change",updateCat);creneau.addEventListener("change",refreshCreneaux);
 function showMsg(text,type){message.textContent=text;message.className="msg "+type;}
-essaiForm.addEventListener("submit",async(e)=>{e.preventDefault();let c=CRENEAUX.find(x=>x.id===creneau.value);if(!c){showMsg("Merci de choisir un créneau.", "ko");return;}updateCat();if(isMineur(categorie.value)&&!parentNom.value.trim()){showMsg("Nom du parent obligatoire pour un mineur.", "ko");return;}let dateIso=isoDate(dateNaissance.value);if(!dateIso){showMsg("Merci de saisir une date au format jj/mm/aaaa.", "ko");return;}let data={action:"saveEssaiBasket",data:{nom:nom.value.trim(),prenom:prenom.value.trim(),dateNaissance:dateIso,sexe:sexe.value,categorie:categorie.value,idEssai:c.id,creneauLabel:label(c),lieu:c.lieu,adresse:c.adresse,parentNom:parentNom.value.trim(),telephone:telephone.value.trim(),email:email.value.trim(),commentaire:commentaire.value.trim(),source:"Site public essais 2026-2027"}};submitBtn.disabled=true;showMsg("Envoi en cours...", "ok");try{await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});essaiForm.classList.add("hidden");successTitle.textContent=`Merci, ${prenom.value.trim()} est bien inscrit(e) aux essais.`;successText.textContent=`Créneau : ${label(c)}`;successCard.classList.add("visible");}catch(err){showMsg("L’envoi n’a pas abouti. Merci de réessayer ou de contacter le club.", "ko");}finally{submitBtn.disabled=false;}});
+
+function buildEssaiSummary(c){
+  const joueur = `${prenom.value.trim()} ${nom.value.trim()}`.trim();
+  return [
+    "Essai basket ES Blanquefort Basket Ball",
+    "Joueur : " + joueur,
+    "Catégorie : " + categorie.value,
+    "Créneau : " + label(c),
+    "Lieu : " + (c.lieu || ""),
+    "Adresse : " + (c.adresse || ""),
+    "Info club : le club ne recontacte que si le créneau n’est pas possible ou si une information manque."
+  ].join("\\n");
+}
+function copyTextFallback(text){
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.setAttribute("readonly","");
+  area.style.position = "fixed";
+  area.style.left = "-9999px";
+  document.body.appendChild(area);
+  area.select();
+  document.execCommand("copy");
+  document.body.removeChild(area);
+}
+async function copyEssaiSummary(c){
+  const text = buildEssaiSummary(c);
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+    }else{
+      copyTextFallback(text);
+    }
+    copyStatus.textContent = "Infos copiées. Vous pouvez les coller dans SMS, WhatsApp ou Notes.";
+  }catch(e){
+    copyStatus.textContent = text;
+  }
+}
+
+function downloadEssaiSummary(c){
+  const text = buildEssaiSummary(c);
+  const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const safeName = `${prenom.value.trim()}-${nom.value.trim()}-${categorie.value}`.replace(/[^a-z0-9_-]+/gi,"-").toLowerCase();
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "recap-essai-esbb-" + safeName + ".txt";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  copyStatus.textContent = "Récapitulatif téléchargé. Vous pouvez le retrouver dans vos fichiers/téléchargements.";
+}
+
+function toICSDate(dateFr, timeFr){
+  const parts = String(dateFr || "").split("/");
+  const hm = String(timeFr || "00h00").replace("h",":").split(":");
+  const y = parts[2], m = parts[1], d = parts[0];
+  const hh = (hm[0] || "00").padStart(2,"0");
+  const mm = (hm[1] || "00").padStart(2,"0");
+  return `${y}${m}${d}T${hh}${mm}00`;
+}
+function downloadEssaiCalendar(c){
+  const uid = (c.id || "ESSAI") + "@esbb";
+  const title = "Essai basket ESBB - " + (categorie.value || c.categorie || "");
+  const description = buildEssaiSummary(c).replace(/\n/g,"\\\\n");
+  const location = [c.lieu || "", c.adresse || ""].filter(Boolean).join(" - ");
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//ESBB//Essais Basket//FR",
+    "BEGIN:VEVENT",
+    "UID:" + uid,
+    "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g,"").replace(/\\.\\d{3}Z$/,"Z"),
+    "DTSTART:" + toICSDate(c.date, c.debut),
+    "DTEND:" + toICSDate(c.date, c.fin),
+    "SUMMARY:" + title,
+    "LOCATION:" + location,
+    "DESCRIPTION:" + description,
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ].join("\\r\\n");
+  const blob = new Blob([ics], {type:"text/calendar;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "essai-basket-esbb.ics";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+let lastSelectedCreneau = null;
+
+essaiForm.addEventListener("submit",async(e)=>{e.preventDefault();let c=CRENEAUX.find(x=>x.id===creneau.value);if(!c){showMsg("Merci de choisir un créneau.", "ko");return;}updateCat();if(isMineur(categorie.value)&&!parentNom.value.trim()){showMsg("Nom du parent obligatoire pour un mineur.", "ko");return;}let dateIso=isoDate(dateNaissance.value);if(!dateIso){showMsg("Merci de saisir une date au format jj/mm/aaaa.", "ko");return;}let data={action:"saveEssaiBasket",data:{nom:nom.value.trim(),prenom:prenom.value.trim(),dateNaissance:dateIso,sexe:sexe.value,categorie:categorie.value,idEssai:c.id,creneauLabel:label(c),lieu:c.lieu,adresse:c.adresse,parentNom:parentNom.value.trim(),telephone:telephone.value.trim(),email:email.value.trim(),commentaire:commentaire.value.trim(),source:"Site public essais 2026-2027"}};submitBtn.disabled=true;showMsg("Envoi en cours...", "ok");try{await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});essaiForm.classList.add("hidden");successTitle.textContent=`Merci, ${prenom.value.trim()} est bien inscrit(e) aux essais.`;successText.textContent=`Créneau : ${label(c)}`;lastSelectedCreneau=c;downloadSummaryBtn.onclick=()=>downloadEssaiSummary(lastSelectedCreneau);copySummaryBtn.onclick=()=>copyEssaiSummary(lastSelectedCreneau);downloadCalendarBtn.onclick=()=>downloadEssaiCalendar(lastSelectedCreneau);successCard.classList.add("visible");}catch(err){showMsg("L’envoi n’a pas abouti. Merci de réessayer ou de contacter le club.", "ko");}finally{submitBtn.disabled=false;}});
 function mergeCreneaux(localList, remoteList){
   const map = new Map();
   [...localList, ...(Array.isArray(remoteList) ? remoteList : [])].forEach(c => {
